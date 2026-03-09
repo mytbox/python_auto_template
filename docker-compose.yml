@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  appium-node-1:
+    build: .
+    ports:
+      - "4723:4723"
+    environment:
+      - EMULATOR_DEVICE=Pixel_4
+      - EMULATOR_SDK=30
+      - APPIUM_PORT=4723
+    volumes:
+      - ./app:/app
+    networks:
+      - appium-network
+
+  appium-node-2:
+    build: .
+    ports:
+      - "4724:4723"
+    environment:
+      - EMULATOR_DEVICE=Pixel_4
+      - EMULATOR_SDK=30
+      - APPIUM_PORT=4723
+    volumes:
+      - ./app:/app
+    networks:
+      - appium-network
+
+  appium-node-3:
+    build: .
+    ports:
+      - "4725:4723"
+    environment:
+      - EMULATOR_DEVICE=Pixel_4
+      - EMULATOR_SDK=30
+      - APPIUM_PORT=4723
+    volumes:
+      - ./app:/app
+    networks:
+      - appium-network
+
+  appium-node-4:
+    build: .
+    ports:
+      - "4726:4723"
+    environment:
+      - EMULATOR_DEVICE=Pixel_4
+      - EMULATOR_SDK=30
+      - APPIUM_PORT=4723
+    volumes:
+      - ./app:/app
+    networks:
+      - appium-network
+
+  appium-node-5:
+    build: .
+    ports:
+      - "4727:4723"
+    environment:
+      - EMULATOR_DEVICE=Pixel_4
+      - EMULATOR_SDK=30
+      - APPIUM_PORT=4723
+    volumes:
+      - ./app:/app
+    networks:
+      - appium-network
+
+networks:
+  appium-network:
+    driver: bridge

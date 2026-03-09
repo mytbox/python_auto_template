@@ -1,0 +1,34 @@
+{
+  "browserstack": {
+    "server": "hub-cloud.browserstack.com",
+    "user": "YOUR_BROWSERSTACK_USERNAME",
+    "key": "YOUR_BROWSERSTACK_ACCESS_KEY",
+    "devices": [
+      {
+        "device": "Google Pixel 4",
+        "os_version": "11.0",
+        "app": "bs://sample_app.apk"
+      },
+      {
+        "device": "Samsung Galaxy S21",
+        "os_version": "11.0",
+        "app": "bs://sample_app.apk"
+      },
+      {
+        "device": "OnePlus 9",
+        "os_version": "11.0",
+        "app": "bs://sample_app.apk"
+      },
+      {
+        "device": "Xiaomi Mi 11",
+        "os_version": "11.0",
+        "app": "bs://sample_app.apk"
+      },
+      {
+        "device": "Huawei P40",
+        "os_version": "10.0",
+        "app": "bs://sample_app.apk"
+      }
+    ]
+  }
+}

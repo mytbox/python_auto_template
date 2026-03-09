@@ -1,0 +1,89 @@
+{
+  "devices": [
+    {
+      "name": "emulator-5554",
+      "platformName": "Android",
+      "automationName": "UiAutomator2",
+      "deviceName": "emulator-5554",
+      "platformVersion": "12",
+      "appPackage": "com.example.app",
+      "appActivity": ".MainActivity",
+      "noReset": true,
+      "fullReset": false,
+      "unicodeKeyboard": true,
+      "resetKeyboard": true,
+      "autoGrantPermissions": true,
+      "newCommandTimeout": 300
+    },
+    {
+      "name": "emulator-5556",
+      "platformName": "Android",
+      "automationName": "UiAutomator2",
+      "deviceName": "emulator-5556",
+      "platformVersion": "12",
+      "appPackage": "com.example.app",
+      "appActivity": ".MainActivity",
+      "noReset": true,
+      "fullReset": false,
+      "unicodeKeyboard": true,
+      "resetKeyboard": true,
+      "autoGrantPermissions": true,
+      "newCommandTimeout": 300
+    },
+    {
+      "name": "emulator-5558",
+      "platformName": "Android",
+      "automationName": "UiAutomator2",
+      "deviceName": "emulator-5558",
+      "platformVersion": "12",
+      "appPackage": "com.example.app",
+      "appActivity": ".MainActivity",
+      "noReset": true,
+      "fullReset": false,
+      "unicodeKeyboard": true,
+      "resetKeyboard": true,
+      "autoGrantPermissions": true,
+      "newCommandTimeout": 300
+    },
+    {
+      "name": "emulator-5560",
+      "platformName": "Android",
+      "automationName": "UiAutomator2",
+      "deviceName": "emulator-5560",
+      "platformVersion": "12",
+      "appPackage": "com.example.app",
+      "appActivity": ".MainActivity",
+      "noReset": true,
+      "fullReset": false,
+      "unicodeKeyboard": true,
+      "resetKeyboard": true,
+      "autoGrantPermissions": true,
+      "newCommandTimeout": 300
+    },
+    {
+      "name": "emulator-5562",
+      "platformName": "Android",
+      "automationName": "UiAutomator2",
+      "deviceName": "emulator-5562",
+      "platformVersion": "12",
+      "appPackage": "com.example.app",
+      "appActivity": ".MainActivity",
+      "noReset": true,
+      "fullReset": false,
+      "unicodeKeyboard": true,
+      "resetKeyboard": true,
+      "autoGrantPermissions": true,
+      "newCommandTimeout": 300
+    }
+  ],
+  "default_capabilities": {
+    "platformName": "Android",
+    "automationName": "UiAutomator2",
+    "noReset": true,
+    "fullReset": false,
+    "unicodeKeyboard": true,
+    "resetKeyboard": true,
+    "autoGrantPermissions": true,
+    "newCommandTimeout": 300
+  }
+}

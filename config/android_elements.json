@@ -1,0 +1,162 @@
+{
+  "login_page": {
+    "phone_input": {
+      "type": "id",
+      "value": "com.example.app:id/phone_input"
+    },
+    "code_input": {
+      "type": "id",
+      "value": "com.example.app:id/code_input"
+    },
+    "get_code_button": {
+      "type": "id",
+      "value": "com.example.app:id/get_code_button"
+    },
+    "login_button": {
+      "type": "id",
+      "value": "com.example.app:id/login_button"
+    },
+    "error_message": {
+      "type": "id",
+      "value": "com.example.app:id/error_message"
+    },
+    "login_container": {
+      "type": "id",
+      "value": "com.example.app:id/login_container"
+    }
+  },
+  "home_page": {
+    "home_container": {
+      "type": "id",
+      "value": "com.example.app:id/home_container"
+    },
+    "home_title": {
+      "type": "id",
+      "value": "com.example.app:id/home_title"
+    },
+    "banner_view": {
+      "type": "id",
+      "value": "com.example.app:id/banner_view"
+    },
+    "function_list": {
+      "type": "id",
+      "value": "com.example.app:id/function_list"
+    },
+    "menu_item_1": {
+      "type": "id",
+      "value": "com.example.app:id/menu_item_1"
+    },
+    "menu_item_2": {
+      "type": "id",
+      "value": "com.example.app:id/menu_item_2"
+    },
+    "menu_item_3": {
+      "type": "id",
+      "value": "com.example.app:id/menu_item_3"
+    }
+  },
+  "detail_page": {
+    "detail_container": {
+      "type": "id",
+      "value": "com.example.app:id/detail_container"
+    },
+    "detail_title": {
+      "type": "id",
+      "value": "com.example.app:id/detail_title"
+    },
+    "detail_content": {
+      "type": "id",
+      "value": "com.example.app:id/detail_content"
+    },
+    "back_button": {
+      "type": "id",
+      "value": "com.example.app:id/back_button"
+    }
+  },
+  "profile_page": {
+    "profile_container": {
+      "type": "id",
+      "value": "com.example.app:id/profile_container"
+    },
+    "user_avatar": {
+      "type": "id",
+      "value": "com.example.app:id/user_avatar"
+    },
+    "user_name": {
+      "type": "id",
+      "value": "com.example.app:id/user_name"
+    },
+    "user_phone": {
+      "type": "id",
+      "value": "com.example.app:id/user_phone"
+    },
+    "edit_profile_button": {
+      "type": "id",
+      "value": "com.example.app:id/edit_profile_button"
+    },
+    "edit_name_input": {
+      "type": "id",
+      "value": "com.example.app:id/edit_name_input"
+    },
+    "save_button": {
+      "type": "id",
+      "value": "com.example.app:id/save_button"
+    },
+    "logout_button": {
+      "type": "id",
+      "value": "com.example.app:id/logout_button"
+    },
+    "logout_confirm_button": {
+      "type": "id",
+      "value": "com.example.app:id/logout_confirm_button"
+    }
+  },
+  "main_page": {
+    "main_container": {
+      "type": "id",
+      "value": "com.example.app:id/main_container"
+    },
+    "home_tab": {
+      "type": "id",
+      "value": "com.example.app:id/home_tab"
+    },
+    "profile_tab": {
+      "type": "id",
+      "value": "com.example.app:id/profile_tab"
+    },
+    "message_tab": {
+      "type": "id",
+      "value": "com.example.app:id/message_tab"
+    }
+  },
+  "common": {
+    "loading_view": {
+      "type": "id",
+      "value": "com.example.app:id/loading_view"
+    },
+    "empty_view": {
+      "type": "id",
+      "value": "com.example.app:id/empty_view"
+    },
+    "error_view": {
+      "type": "id",
+      "value": "com.example.app:id/error_view"
+    },
+    "retry_button": {
+      "type": "id",
+      "value": "com.example.app:id/retry_button"
+    },
+    "confirm_button": {
+      "type": "id",
+      "value": "com.example.app:id/confirm_button"
+    },
+    "cancel_button": {
+      "type": "id",
+      "value": "com.example.app:id/cancel_button"
+    },
+    "close_button": {
+      "type": "id",
+      "value": "com.example.app:id/close_button"
+    }
+  }
+}

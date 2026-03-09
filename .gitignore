@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.coverage
+htmlcov/
+.DS_Store
+.env
+venv/
+env/
+.test_data/
+progress2.output

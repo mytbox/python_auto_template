@@ -1,0 +1,31 @@
+{
+  "appium_server": {
+    "host": "127.0.0.1",
+    "port": 4723,
+    "base_path": "/wd/hub"
+  },
+  "device": {
+    "platformName": "Android",
+    "automationName": "UiAutomator2",
+    "deviceName": "YOUR_DEVICE_ID",
+    "platformVersion": "YOUR_ANDROID_VERSION",
+    "appPackage": "com.example.app",
+    "appActivity": ".MainActivity",
+    "noReset": true,
+    "fullReset": false,
+    "unicodeKeyboard": true,
+    "resetKeyboard": true,
+    "autoGrantPermissions": true,
+    "newCommandTimeout": 300
+  },
+  "wait": {
+    "implicit_wait": 10,
+    "explicit_wait": 20,
+    "page_load_timeout": 30
+  },
+  "screenshot": {
+    "enabled": true,
+    "on_failure": true,
+    "directory": "./screenshots"
+  }
+}
