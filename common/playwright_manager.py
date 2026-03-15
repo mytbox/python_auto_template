@@ -16,11 +16,11 @@ class PlaywrightManager:
     
     def __init__(self, config_path: str = None):
         """初始化 Playwright 管理器
-        
+
         Args:
             config_path: 配置文件路径，默认为 config/web_config.json
         """
-        self.project_root = Path(__file__).parent.parent.parent
+        self.project_root = Path(__file__).parent.parent
         if config_path is None:
             config_path = self.project_root / "config" / "web_config.json"
         
@@ -41,30 +41,32 @@ class PlaywrightManager:
     
     def start_browser(self, browser_type: str = None, headless: bool = None) -> Page:
         """启动浏览器并返回页面对象
-        
+
         Args:
             browser_type: 浏览器类型，默认从配置读取
             headless: 是否无头模式，默认从配置读取
-            
+
         Returns:
             Page: Playwright 页面对象
         """
         if self.page is not None:
             logger.warning("浏览器已经启动，返回现有页面")
             return self.page
-        
+
         browser_config = self.config.get("playwright", {}).get("browser", {})
         context_config = self.config.get("playwright", {}).get("context", {})
-        
+
         if browser_type is None:
             browser_type = browser_config.get("type", "chromium")
         if headless is None:
             headless = browser_config.get("headless", True)
-        
+
         logger.info(f"启动 {browser_type} 浏览器，无头模式: {headless}")
-        
-        self.playwright = sync_playwright().start()
-        
+
+        # 只有在没有现有 Playwright 实例时才启动新的
+        if self.playwright is None:
+            self.playwright = sync_playwright().start()
+
         # 根据类型选择浏览器
         if browser_type.lower() == "chromium":
             self.browser = self.playwright.chromium.launch(
@@ -83,29 +85,113 @@ class PlaywrightManager:
             )
         else:
             raise ValueError(f"不支持的浏览器类型: {browser_type}")
-        
+
         # 创建上下文
         self.context = self.browser.new_context(
             viewport=context_config.get("viewport", {"width": 1280, "height": 720}),
             ignore_https_errors=context_config.get("ignore_https_errors", True),
             accept_downloads=context_config.get("accept_downloads", True)
         )
-        
+
         # 设置超时
         self.context.set_default_timeout(
             self.config.get("test", {}).get("timeout", 10000)
         )
-        
+
         # 创建页面
         self.page = self.context.new_page()
-        
+
         # 设置截图目录
         screenshot_config = self.config.get("playwright", {}).get("screenshot", {})
         if screenshot_config.get("enabled", True):
             screenshot_dir = self.project_root / screenshot_config.get("dir", "./test-results/screenshots")
             screenshot_dir.mkdir(parents=True, exist_ok=True)
-        
+
         return self.page
+
+    def start_browser_with_global_playwright(self, browser_type: str = None, headless: bool = None, global_playwright=None) -> Page:
+        """使用全局 Playwright 实例启动浏览器
+
+        Args:
+            browser_type: 浏览器类型，默认从配置读取
+            headless: 是否无头模式，默认从配置读取
+            global_playwright: 全局 Playwright 实例
+
+        Returns:
+            Page: Playwright 页面对象
+        """
+        if self.page is not None:
+            logger.warning("浏览器已经启动，关闭旧页面")
+            self.close_browser_context()
+
+        browser_config = self.config.get("playwright", {}).get("browser", {})
+        context_config = self.config.get("playwright", {}).get("context", {})
+
+        if browser_type is None:
+            browser_type = browser_config.get("type", "chromium")
+        if headless is None:
+            headless = browser_config.get("headless", True)
+
+        logger.info(f"启动 {browser_type} 浏览器，无头模式: {headless}")
+
+        # 使用传入的全局 Playwright 实例
+        if global_playwright is None:
+            raise RuntimeError("全局 Playwright 实例未初始化")
+
+        self.playwright = global_playwright
+
+        # 根据类型选择浏览器
+        if browser_type.lower() == "chromium":
+            self.browser = self.playwright.chromium.launch(
+                headless=headless,
+                slow_mo=browser_config.get("slow_mo", 100)
+            )
+        elif browser_type.lower() == "firefox":
+            self.browser = self.playwright.firefox.launch(
+                headless=headless,
+                slow_mo=browser_config.get("slow_mo", 100)
+            )
+        elif browser_type.lower() == "webkit":
+            self.browser = self.playwright.webkit.launch(
+                headless=headless,
+                slow_mo=browser_config.get("slow_mo", 100)
+            )
+        else:
+            raise ValueError(f"不支持的浏览器类型: {browser_type}")
+
+        # 创建上下文
+        self.context = self.browser.new_context(
+            viewport=context_config.get("viewport", {"width": 1280, "height": 720}),
+            ignore_https_errors=context_config.get("ignore_https_errors", True),
+            accept_downloads=context_config.get("accept_downloads", True)
+        )
+
+        # 设置超时
+        self.context.set_default_timeout(
+            self.config.get("test", {}).get("timeout", 10000)
+        )
+
+        # 创建页面
+        self.page = self.context.new_page()
+
+        return self.page
+
+    def close_browser_context(self):
+        """关闭浏览器上下文（但不停止 Playwright）"""
+        if self.page:
+            self.page.close()
+            self.page = None
+            logger.info("页面已关闭")
+
+        if self.context:
+            self.context.close()
+            self.context = None
+            logger.info("浏览器上下文已关闭")
+
+        if self.browser:
+            self.browser.close()
+            self.browser = None
+            logger.info("浏览器已关闭")
     
     def close_browser(self):
         """关闭浏览器"""

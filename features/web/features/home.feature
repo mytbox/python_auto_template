@@ -1,52 +1,28 @@
-Feature: Web 首页功能
-  测试 Web 应用的首页功能
+Feature: Web Automation Demo Page
+  Test docs/mock/html/index.html page
 
-  Background:
-    Given 启动浏览器
-    And 导航到 "/login"
-    And 在 login_page 页面的 username_input 元素中输入 "testuser"
-    And 在 login_page 页面的 password_input 元素中输入 "password123"
-    And 点击 login_page 页面的 login_button 元素
-    Then 等待页面加载完成
+  Scenario: Verify Home Page
+    Given 启动 chromium 浏览器（有头模式）
+    # When 导航到 "file:///D:/githup_home/python_auto_template/docs/mock/html/index.html"
+    # Then 页面标题应为 "Web 自动化测试演示页面"
+    # And 检查 home 页面的 welcome_message 元素可见
 
-  Scenario: 验证首页导航链接
-    And 检查 navigation 页面的 home_link 元素存在
-    And 检查 navigation 页面的 profile_link 元素存在
-    And 检查 navigation 页面的 settings_link 元素存在
+  Scenario: Navigation Test
+    Given 启动 chromium 浏览器（有头模式）
+    When 导航到 "file:///D:/githup_home/python_auto_template/docs/mock/html/index.html"
+    And 点击 home 页面的 nav_register 元素
+    Then 检查 register 页面的 form 元素可见
 
-  Scenario: 导航到个人资料页面
-    When 点击 navigation 页面的 profile_link 元素
-    Then 等待页面加载完成
-    And 检查当前 URL 包含 "/profile"
+  Scenario: Login Test
+    Given 启动 chromium 浏览器（有头模式）
+    When 导航到 "file:///D:/githup_home/python_auto_template/docs/mock/html/index.html"
+    And 点击 home 页面的 login_link 元素
+    Then 检查 login 页面的 modal 元素可见
 
-  Scenario: 导航到设置页面
-    When 点击 navigation 页面的 settings_link 元素
-    Then 等待页面加载完成
-    And 检查当前 URL 包含 "/settings"
-
-  Scenario: 导航回首页
-    When 点击 navigation 页面的 profile_link 元素
-    And 等待页面加载完成
-    And 点击 navigation 页面的 home_link 元素
-    Then 等待页面加载完成
-    And 检查当前 URL 包含 "/home"
-
-  Scenario: 验证页面滚动功能
-    When 滚动到页面底部
-    And 等待 2 秒
-    And 滚动到页面顶部
-    And 等待 2 秒
-    Then 检查 home_page 页面的 welcome_message 元素可见
-
-  Scenario: 验证浏览器导航功能
-    When 点击 navigation 页面的 profile_link 元素
-    And 等待页面加载完成
-    And 点击浏览器后退按钮
-    Then 等待页面加载完成
-    And 检查当前 URL 包含 "/home"
-    When 点击浏览器前进按钮
-    Then 等待页面加载完成
-    And 检查当前 URL 包含 "/profile"
-    And 刷新当前页面
-    Then 等待页面加载完成
-    And 检查当前 URL 包含 "/profile"
+  Scenario: Dropdown Test
+    Given 启动 chromium 浏览器（有头模式）
+    When 导航到 "file:///D:/githup_home/python_auto_template/docs/mock/html/index.html"
+    And 点击 home 页面的 nav_dropdown 元素
+    And 点击 dropdown 页面的 city_select_button 元素
+    And 点击 dropdown 页面的 city_beijing 元素
+    Then 检查 dropdown 页面的 city_select_button 元素包含文本 "北京"

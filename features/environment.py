@@ -69,18 +69,18 @@ def before_all(context):
         except Exception as e:
             logger.error(f"Appium 管理器初始化失败: {e}")
             context.appium_manager = None
-    
-    # 检查是否为 Web 测试模式
+
+    # 检查是否为 Web 测试模式 - 初始化全局 Playwright 实例
     context.is_web_test = hasattr(context.config, 'userdata') and context.config.userdata.get('web_test') == 'true'
     if context.is_web_test:
-        logger.info("检测到 Web 测试模式")
+        logger.info("检测到 Web 测试模式，初始化全局 Playwright 实例")
         try:
-            from common.playwright_manager import PlaywrightManager
-            context.playwright_manager = PlaywrightManager()
-            logger.info("Playwright 管理器初始化成功")
+            from playwright.sync_api import sync_playwright
+            context._global_playwright = sync_playwright().start()
+            logger.info("全局 Playwright 实例初始化成功")
         except Exception as e:
-            logger.error(f"Playwright 管理器初始化失败: {e}")
-            context.playwright_manager = None
+            logger.error(f"全局 Playwright 实例初始化失败: {e}")
+            context._global_playwright = None
 
 
 def after_all(context):
@@ -102,14 +102,14 @@ def after_all(context):
             logger.info("Appium 驱动已关闭")
         except Exception as e:
             logger.error(f"关闭 Appium 驱动时出错: {e}")
-    
-    # 关闭 Playwright 浏览器
-    if hasattr(context, 'playwright_manager') and context.playwright_manager:
+
+    # 关闭全局 Playwright 实例
+    if hasattr(context, '_global_playwright') and context._global_playwright:
         try:
-            context.playwright_manager.close_browser()
-            logger.info("Playwright 浏览器已关闭")
+            context._global_playwright.stop()
+            logger.info("全局 Playwright 实例已停止")
         except Exception as e:
-            logger.error(f"关闭 Playwright 浏览器时出错: {e}")
+            logger.error(f"停止全局 Playwright 实例时出错: {e}")
 
 
 def before_feature(context, _feature):
@@ -143,6 +143,29 @@ def after_scenario(context, scenario):
     """
     在每个场景结束后执行
     """
+    # Web 测试：每个场景结束后关闭浏览器上下文（但不停止 Playwright）
+    if hasattr(context, 'playwright_manager') and context.playwright_manager:
+        try:
+            # 检查是否保持浏览器打开（用于调试）
+            keep_browser_open = context.playwright_manager.config.get("playwright", {}).get("browser", {}).get("keep_browser_open", False)
+
+            if keep_browser_open:
+                logger.info("调试模式：保持浏览器打开")
+            else:
+                # 只关闭页面和上下文，不停止 Playwright
+                if context.playwright_manager.page:
+                    context.playwright_manager.page.close()
+                    context.playwright_manager.page = None
+                if context.playwright_manager.context:
+                    context.playwright_manager.context.close()
+                    context.playwright_manager.context = None
+                if context.playwright_manager.browser:
+                    context.playwright_manager.browser.close()
+                    context.playwright_manager.browser = None
+                logger.info("场景结束后关闭浏览器上下文")
+        except Exception as e:
+            logger.error(f"关闭浏览器上下文时出错: {e}")
+
     # 保存批量检查结果到文件
     if hasattr(context, 'scenario_context') and hasattr(context.scenario_context, 'batch_check_results'):
         results = context.scenario_context.batch_check_results

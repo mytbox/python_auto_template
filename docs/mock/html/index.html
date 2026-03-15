@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web 自动化测试演示页面</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* 导航栏 */
+        nav {
+            background: rgba(255,255,255,0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        nav a {
+            color: #333;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        nav a:hover, nav a.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* 登录弹窗 */
+        #login-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .modal-content h2 { margin-bottom: 1.5rem; text-align: center; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: #666; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn:hover { background: #5568d3; }
+        .btn-secondary { background: #6c757d; margin-top: 0.5rem; }
+        .btn-secondary:hover { background: #5a6268; }
+
+        /* 注册表单 */
+        #register-section form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .checkbox-group, .radio-group { margin-top: 0.5rem; }
+        .checkbox-group label, .radio-group label {
+            display: inline-block;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        /* 下单页面 */
+        #order-section { padding: 2rem; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-image {
+            width: 150px;
+            height: 150px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        .product-price { color: #e74c3c; font-size: 1.5rem; font-weight: bold; }
+        .product-quantity {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .product-quantity button {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .product-quantity input {
+            width: 50px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        .cart {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 1rem;
+        }
+
+        /* 延迟加载区域 */
+        #lazy-section { padding: 2rem; }
+        .content-area {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            min-height: 300px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* 下拉菜单 */
+        #dropdown-section { padding: 2rem; }
+        .demo-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .custom-select {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .select-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .select-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 5px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        .select-dropdown.show { display: block; }
+        .select-option {
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .select-option:hover { background: #f5f5f5; }
+        .select-option.selected { background: #667eea; color: white; }
+
+        /* 多选组件 */
+        .multi-select {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .option-tag {
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option-tag.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        /* 模态框通用样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.show { display: flex; }
+
+        /* 表格 */
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f5f5f5; font-weight: 600; }
+        tr:hover { background: #f9f9f9; }
+
+        /* 消息提示 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            background: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            display: none;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+        .toast.error { background: #f44336; }
+        .toast.warning { background: #ff9800; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .pagination button.active, .pagination button:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* 手风琴 */
+        .accordion-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+        .accordion-header {
+            padding: 1rem;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .accordion-content.open { max-height: 500px; }
+
+        /* 标签页 */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active { border-bottom-color: #667eea; color: #667eea; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .section { display: none; padding: 2rem; }
+        .section.active { display: block; }
+        .section h1 { color: white; text-align: center; margin-bottom: 2rem; }
+
+        /* 用户下拉菜单 */
+        .user-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            min-width: 120px;
+            z-index: 1001;
+        }
+        .user-dropdown-menu.show { display: block; }
+        .user-dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .user-dropdown-menu a:hover { background: #f5f5f5; }
+        .user-dropdown-menu a.logout {
+            border-top: 1px solid #eee;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <ul>
+            <li><a href="#" class="nav-link active" data-section="home">首页</a></li>
+            <li><a href="#" class="nav-link" data-section="register">注册</a></li>
+            <li><a href="#" class="nav-link" data-section="order">下单</a></li>
+            <li><a href="#" class="nav-link" data-section="lazy">延迟加载</a></li>
+            <li><a href="#" class="nav-link" data-section="dropdown">下拉菜单</a></li>
+            <li><a href="#" class="nav-link" data-section="table">表格</a></li>
+            <li><a href="#" class="nav-link" data-section="components">更多组件</a></li>
+            <li id="user-info" style="display: block;"><a href="#" class="nav-link" onclick="showLogin()">登录</a></li>
+            <li id="user-menu" style="position: relative; display: none;">
+                <a href="#" class="nav-link" onclick="toggleUserMenu(event)">
+                    <span id="display-username">用户</span>
+                    <span>▼</span>
+                </a>
+                <div id="user-dropdown" class="user-dropdown-menu">
+                    <a href="#" onclick="toggleUserMenu(event)">个人中心</a>
+                    <a href="#" class="logout" onclick="logout(event)">退出登录</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- 首页 -->
+    <section id="home-section" class="section active">
+        <h1>Web 自动化测试演示页面</h1>
+        <div class="demo-container">
+            <h2>欢迎</h2>
+            <p class="welcome-message" style="font-size: 1.2rem; margin: 1rem 0;">这是一个用于 Web 自动化测试的演示页面</p>
+            <p>本页面包含以下测试场景：</p>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li>登录/注册功能</li>
+                <li>商品浏览与下单</li>
+                <li>延迟加载</li>
+                <li>下拉菜单与多选</li>
+                <li>表格与分页</li>
+                <li>各种 UI 组件</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 注册页面 -->
+    <section id="register-section" class="section">
+        <h1>用户注册</h1>
+        <form onsubmit="handleRegister(event)">
+            <h2>创建新账号</h2>
+            <div class="form-group">
+                <label for="reg-username">用户名 *</label>
+                <input type="text" id="reg-username" name="username" required placeholder="请输入用户名">
+            </div>
+            <div class="form-group">
+                <label for="reg-email">邮箱 *</label>
+                <input type="email" id="reg-email" name="email" required placeholder="example@email.com">
+            </div>
+            <div class="form-group">
+                <label for="reg-phone">手机号</label>
+                <input type="tel" id="reg-phone" name="phone" placeholder="13800138000">
+            </div>
+            <div class="form-group">
+                <label for="reg-password">密码 *</label>
+                <input type="password" id="reg-password" name="password" required minlength="6" placeholder="至少6位">
+            </div>
+            <div class="form-group">
+                <label for="reg-confirm">确认密码 *</label>
+                <input type="password" id="reg-confirm" name="confirm" required placeholder="再次输入密码">
+            </div>
+            <div class="form-group">
+                <label for="reg-city">城市</label>
+                <select id="reg-city" name="city">
+                    <option value="">请选择城市</option>
+                    <option value="beijing">北京</option>
+                    <option value="shanghai">上海</option>
+                    <option value="guangzhou">广州</option>
+                    <option value="shenzhen">深圳</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>兴趣（多选）</label>
+                <div class="checkbox-group" id="interests">
+                    <label><input type="checkbox" value="reading"> 阅读</label>
+                    <label><input type="checkbox" value="music"> 音乐</label>
+                    <label><input type="checkbox" value="travel"> 旅游</label>
+                    <label><input type="checkbox" value="sports"> 运动</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>性别（单选）</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender" value="male"> 男</label>
+                    <label><input type="radio" name="gender" value="female"> 女</label>
+                    <label><input type="radio" name="gender" value="other"> 其他</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reg-bio">个人简介</label>
+                <textarea id="reg-bio" name="bio" rows="4" placeholder="介绍一下自己..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="reg-agree" name="agree" required>
+                    我已阅读并同意《用户协议》
+                </label>
+            </div>
+            <button type="submit" class="btn">立即注册</button>
+            <button type="button" class="btn btn-secondary" onclick="showLogin()">已有账号？去登录</button>
+        </form>
+    </section>
+
+    <!-- 下单页面 -->
+    <section id="order-section" class="section">
+        <h1>商品下单</h1>
+        <div class="product-grid">
+            <div class="product-card" data-product-id="1" data-product-name="智能手机" data-product-price="3999">
+                <div class="product-image">📱</div>
+                <h3>智能手机</h3>
+                <p class="product-price">¥3999</p>
+                <div class="product-quantity">
+                    <button onclick="changeQuantity(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="quantity-input">
+                    <button onclick="changeQuantity(this, 1)">+</button>
+                </div>
+                <button class="btn" onclick="addToCart(1)">加入购物车</button>
+            </div>
+            <div class="product-card" data-product-id="2" data-product-name="笔记本电脑" data-product-price="6999">
+                <div class="product-image">💻</div>
+                <h3>笔记本电脑</h3>
+                <p class="product-price">¥6999</p>
+                <div class="product-quantity">
+                    <button onclick="changeQuantity(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="quantity-input">
+                    <button onclick="changeQuantity(this, 1)">+</button>
+                </div>
+                <button class="btn" onclick="addToCart(2)">加入购物车</button>
+            </div>
+            <div class="product-card" data-product-id="3" data-product-name="智能手表" data-product-price="1999">
+                <div class="product-image">⌚</div>
+                <h3>智能手表</h3>
+                <p class="product-price">¥1999</p>
+                <div class="product-quantity">
+                    <button onclick="changeQuantity(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="quantity-input">
+                    <button onclick="changeQuantity(this, 1)">+</button>
+                </div>
+                <button class="btn" onclick="addToCart(3)">加入购物车</button>
+            </div>
+            <div class="product-card" data-product-id="4" data-product-name="无线耳机" data-product-price="599">
+                <div class="product-image">🎧</div>
+                <h3>无线耳机</h3>
+                <p class="product-price">¥599</p>
+                <div class="product-quantity">
+                    <button onclick="changeQuantity(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="quantity-input">
+                    <button onclick="changeQuantity(this, 1)">+</button>
+                </div>
+                <button class="btn" onclick="addToCart(4)">加入购物车</button>
+            </div>
+        </div>
+
+        <div class="cart">
+            <h2>购物车</h2>
+            <div id="cart-items">
+                <p style="color: #999; text-align: center; padding: 2rem;">购物车为空</p>
+            </div>
+            <div class="cart-total">
+                总计: ¥<span id="cart-total">0</span>
+            </div>
+            <button class="btn" style="margin-top: 1rem;" onclick="placeOrder()">立即结算</button>
+        </div>
+    </section>
+
+    <!-- 延迟加载页面 -->
+    <section id="lazy-section" class="section">
+        <h1>延迟加载演示</h1>
+        <div class="demo-container">
+            <p style="margin-bottom: 1rem;">点击按钮测试不同延迟场景</p>
+            <button class="btn" onclick="loadContent(1000)">1秒加载</button>
+            <button class="btn" style="margin-top: 0.5rem;" onclick="loadContent(3000)">3秒加载</button>
+            <button class="btn" style="margin-top: 0.5rem;" onclick="loadContent(5000)">5秒加载</button>
+
+            <div class="content-area" style="margin-top: 2rem;">
+                <div id="lazy-content">
+                    <div class="loading-spinner"></div>
+                    <p style="margin-top: 1rem;">加载中...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 下拉菜单页面 -->
+    <section id="dropdown-section" class="section">
+        <h1>下拉菜单演示</h1>
+        <div class="demo-container">
+            <h2>单选下拉</h2>
+            <div class="form-group">
+                <label>选择城市</label>
+                <div class="custom-select" id="city-select">
+                    <div class="select-button">
+                        <span>请选择城市</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="select-dropdown">
+                        <div class="select-option" data-value="beijing">北京</div>
+                        <div class="select-option" data-value="shanghai">上海</div>
+                        <div class="select-option" data-value="guangzhou">广州</div>
+                        <div class="select-option" data-value="shenzhen">深圳</div>
+                        <div class="select-option" data-value="hangzhou">杭州</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>多选下拉</h2>
+            <div class="form-group">
+                <label>选择技能（可多选）</label>
+                <div class="multi-select" id="skills-select">
+                    <div class="option-tag" data-value="python">Python</div>
+                    <div class="option-tag" data-value="java">Java</div>
+                    <div class="option-tag" data-value="javascript">JavaScript</div>
+                    <div class="option-tag" data-value="go">Go</div>
+                    <div class="option-tag" data-value="rust">Rust</div>
+                    <div class="option-tag" data-value="c++">C++</div>
+                </div>
+                <p style="margin-top: 0.5rem; color: #666;">已选择: <span id="selected-skills">无</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 表格页面 -->
+    <section id="table-section" class="section">
+        <h1>表格与分页</h1>
+        <div class="demo-container" style="max-width: 800px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2>用户列表</h2>
+                <input type="text" placeholder="搜索..." style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="select-all"></th>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>邮箱</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                </tbody>
+            </table>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                <span style="color: #666;">共 3 页，当前第 <span id="current-page">1</span>/3 页</span>
+                <div class="pagination">
+                    <button onclick="changePage(-1)">&lt;</button>
+                    <button class="page-num active" onclick="goToPage(1)">1</button>
+                    <button class="page-num" onclick="goToPage(2)">2</button>
+                    <button class="page-num" onclick="goToPage(3)">3</button>
+                    <button onclick="changePage(1)">&gt;</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 更多组件页面 -->
+    <section id="components-section" class="section">
+        <h1>更多 UI 组件</h1>
+        <div class="demo-container">
+            <!-- 标签页 -->
+            <h2>标签页</h2>
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab(this, 'tab1')">选项卡1</div>
+                <div class="tab" onclick="switchTab(this, 'tab2')">选项卡2</div>
+                <div class="tab" onclick="switchTab(this, 'tab3')">选项卡3</div>
+            </div>
+            <div class="tab-content active" id="tab1">选项卡1的内容</div>
+            <div class="tab-content" id="tab2">选项卡2的内容</div>
+            <div class="tab-content" id="tab3">选项卡3的内容</div>
+
+            <!-- 手风琴 -->
+            <h2 style="margin-top: 2rem;">手风琴</h2>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>什么是自动化测试？</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p style="padding: 1rem;">自动化测试是指使用软件工具来执行测试用例，比较实际结果与预期结果，从而提高测试效率。</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>常用的自动化测试工具有哪些？</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p style="padding: 1rem;">常用的工具有 Selenium、Playwright、Cypress、Appium 等。</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>如何选择合适的测试框架？</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p style="padding: 1rem;">根据项目需求、团队技术栈、维护成本等因素来选择合适的测试框架。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 进度条 -->
+            <h2 style="margin-top: 2rem;">进度条</h2>
+            <div style="background: #f0f0f0; border-radius: 5px; overflow: hidden; height: 30px; margin: 1rem 0;">
+                <div id="progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.3s;"></div>
+            </div>
+            <button class="btn" onclick="startProgress()">开始进度</button>
+
+            <!-- 提示框 -->
+            <h2 style="margin-top: 2rem;">消息提示</h2>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn" style="background: #4CAF50;" onclick="showToast('操作成功！', 'success')">成功</button>
+                <button class="btn" style="background: #f44336;" onclick="showToast('操作失败！', 'error')">错误</button>
+                <button class="btn" style="background: #ff9800;" onclick="showToast('请注意！', 'warning')">警告</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 登录弹窗 -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <h2>用户登录</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required placeholder="请输入用户名">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" required placeholder="请输入密码">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="remember" name="remember">
+                        记住我
+                    </label>
+                </div>
+                <button type="submit" class="btn" id="login-button">登录</button>
+                <button type="button" class="btn btn-secondary" onclick="hideLogin()">取消</button>
+                <p style="margin-top: 1rem; text-align: center;">
+                    <a href="#" onclick="switchSection('register'); hideLogin();">还没有账号？去注册</a>
+                </p>
+            </form>
+            <p id="login-error" style="color: red; text-align: center; margin-top: 1rem; display: none;"></p>
+        </div>
+    </div>
+
+    <!-- 消息提示 -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 全局状态
+        let currentUser = null;
+        let cart = [];
+        let currentPage = 1;
+        const totalPages = 3;
+        const products = {
+            1: { id: 1, name: '智能手机', price: 3999 },
+            2: { id: 2, name: '笔记本电脑', price: 6999 },
+            3: { id: 3, name: '智能手表', price: 1999 },
+            4: { id: 4, name: '无线耳机', price: 599 }
+        };
+
+        // 导航切换
+        document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                switchSection(section);
+            });
+        });
+
+        function switchSection(sectionName) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionName + '-section').classList.add('active');
+
+            document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-section') === sectionName) {
+                    link.classList.add('active');
+                }
+            });
+
+            // 加载表格数据
+            if (sectionName === 'table') {
+                loadTableData();
+            }
+        }
+
+        // 登录相关
+        function showLogin() {
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+
+        function hideLogin() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            setTimeout(() => {
+                if (username && password) {
+                    currentUser = { username };
+                    hideLogin();
+                    updateUserUI();
+                    showToast('登录成功！', 'success');
+                } else {
+                    document.getElementById('login-error').textContent = '用户名或密码不能为空';
+                    document.getElementById('login-error').style.display = 'block';
+                }
+            }, 500);
+        }
+
+        // 更新用户界面
+        function updateUserUI() {
+            const userInfo = document.getElementById('user-info');
+            const userMenu = document.getElementById('user-menu');
+            const displayUsername = document.getElementById('display-username');
+
+            if (currentUser) {
+                userInfo.style.display = 'none';
+                userMenu.style.display = 'block';
+                displayUsername.textContent = currentUser.username;
+            } else {
+                userInfo.style.display = 'block';
+                userMenu.style.display = 'none';
+            }
+        }
+
+        // 切换用户下拉菜单
+        function toggleUserMenu(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const dropdown = document.getElementById('user-dropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // 退出登录
+        function logout(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            currentUser = null;
+            updateUserUI();
+            document.getElementById('user-dropdown').classList.remove('show');
+            showToast('已退出登录', 'success');
+            switchSection('home');
+        }
+
+        // 注册相关
+        function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            const confirm = document.getElementById('reg-confirm').value;
+
+            if (password !== confirm) {
+                showToast('两次密码输入不一致！', 'error');
+                return;
+            }
+
+            showToast('注册成功！请登录', 'success');
+            showLogin();
+        }
+
+        // 购物车相关
+        function changeQuantity(button, delta) {
+            const input = button.parentElement.querySelector('input');
+            let value = parseInt(input.value) + delta;
+            if (value < 1) value = 1;
+            input.value = value;
+        }
+
+        function addToCart(productId) {
+            const card = document.querySelector(`.product-card[data-product-id="${productId}"]`);
+            const quantity = parseInt(card.querySelector('.quantity-input').value);
+            const product = products[productId];
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity += quantity;
+            } else {
+                cart.push({ ...product, quantity });
+            }
+
+            updateCart();
+            showToast(`${product.name} x ${quantity} 已加入购物车`, 'success');
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">购物车为空</p>';
+                cartTotal.textContent = '0';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            cart.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                html += `
+                    <div class="cart-item">
+                        <span>${item.name} x ${item.quantity}</span>
+                        <span>¥${subtotal}</span>
+                    </div>
+                `;
+            });
+
+            cartItems.innerHTML = html;
+            cartTotal.textContent = total;
+        }
+
+        function placeOrder() {
+            if (cart.length === 0) {
+                showToast('购物车为空！', 'warning');
+                return;
+            }
+
+            if (!currentUser) {
+                showToast('请先登录！', 'warning');
+                showLogin();
+                return;
+            }
+
+            showToast('订单提交成功！', 'success');
+            cart = [];
+            updateCart();
+        }
+
+        // 延迟加载
+        function loadContent(delay) {
+            const content = document.getElementById('lazy-content');
+            content.innerHTML = `
+                <div class="loading-spinner"></div>
+                <p style="margin-top: 1rem;">加载中...</p>
+            `;
+
+            setTimeout(() => {
+                content.innerHTML = `
+                    <div>
+                        <h2 style="margin-bottom: 1rem;">加载完成！</h2>
+                        <p>延迟: ${delay}ms</p>
+                        <p>时间: ${new Date().toLocaleString()}</p>
+                        <p>这是一个测试内容，用于验证延迟加载功能。</p>
+                    </div>
+                `;
+                showToast('内容加载完成！', 'success');
+            }, delay);
+        }
+
+        // 单选下拉
+        document.querySelectorAll('.custom-select').forEach(select => {
+            const button = select.querySelector('.select-button');
+            const dropdown = select.querySelector('.select-dropdown');
+            const options = select.querySelectorAll('.select-option');
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle('show');
+            });
+
+            options.forEach(option => {
+                option.addEventListener('click', () => {
+                    options.forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                    button.querySelector('span:first-child').textContent = option.textContent;
+                    dropdown.classList.remove('show');
+                });
+            });
+        });
+
+        // 多选下拉
+        document.querySelectorAll('.option-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                tag.classList.toggle('selected');
+                updateSelectedSkills();
+            });
+        });
+
+        function updateSelectedSkills() {
+            const selected = document.querySelectorAll('#skills-select .option-tag.selected');
+            const skills = Array.from(selected).map(t => t.dataset.value).join(', ');
+            document.getElementById('selected-skills').textContent = skills || '无';
+        }
+
+        // 表格数据
+        function loadTableData() {
+            const tbody = document.getElementById('user-table-body');
+            let html = '';
+            const startIdx = (currentPage - 1) * 5 + 1;
+
+            for (let i = startIdx; i < startIdx + 5; i++) {
+                html += `
+                    <tr>
+                        <td><input type="checkbox" class="user-checkbox"></td>
+                        <td>${i}</td>
+                        <td>用户${i}</td>
+                        <td>user${i}@example.com</td>
+                        <td><span style="color: ${i % 2 === 0 ? 'green' : 'orange'}">${i % 2 === 0 ? '活跃' : '待审'}</span></td>
+                        <td>
+                            <button style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; background: white; cursor: pointer;">编辑</button>
+                            <button style="padding: 0.25rem 0.5rem; border: 1px solid #ddd; background: white; cursor: pointer; color: red;">删除</button>
+                        </td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+            document.getElementById('current-page').textContent = currentPage;
+            updatePaginationButtons();
+        }
+
+        function updatePaginationButtons() {
+            document.querySelectorAll('.page-num').forEach((btn, index) => {
+                btn.classList.remove('active');
+                if (index + 1 === currentPage) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function changePage(delta) {
+            const newPage = currentPage + delta;
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                loadTableData();
+            }
+        }
+
+        function goToPage(page) {
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                loadTableData();
+            }
+        }
+
+        // 标签页切换
+        function switchTab(tab, tabId) {
+            tab.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // 手风琴
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('open');
+            header.querySelector('span:last-child').textContent = content.classList.contains('open') ? '▲' : '▼';
+        }
+
+        // 进度条
+        function startProgress() {
+            const bar = document.getElementById('progress-bar');
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 10;
+                bar.style.width = width + '%';
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        bar.style.width = '0%';
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        // 消息提示
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.style.display = 'block';
+
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // 点击外部关闭下拉
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-select')) {
+                document.querySelectorAll('.select-dropdown').forEach(d => d.classList.remove('show'));
+            }
+            if (!e.target.closest('#user-menu')) {
+                document.getElementById('user-dropdown').classList.remove('show');
+            }
+        });
+
+        // 点击外部关闭登录弹窗
+        document.getElementById('login-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'login-modal') {
+                hideLogin();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

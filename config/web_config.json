@@ -1,0 +1,27 @@
+{
+    "playwright": {
+        "browser": {
+            "type": "chromium",
+            "headless": true,
+            "slow_mo": 100,
+            "keep_browser_open": true
+        },
+        "context": {
+            "viewport": {
+                "width": 1280,
+                "height": 720
+            },
+            "ignore_https_errors": true,
+            "accept_downloads": true
+        },
+        "screenshot": {
+            "enabled": true,
+            "dir": "./test-results/screenshots",
+            "full_page": true
+        }
+    },
+    "test": {
+        "base_url": "",
+        "timeout": 10000
+    }
+}

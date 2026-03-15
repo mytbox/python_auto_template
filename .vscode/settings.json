@@ -1,0 +1,23 @@
+{
+    // Cucumber (Gherkin) Full Support 配置
+    "cucumber.features": [
+        "features/**/features/**/*.feature"
+    ],
+    "cucumber.glue": [
+        "features/**/steps/**/*.py"
+    ],
+    "cucumber.customParameters": [],
+    "cucumber.strictGherkinCompletion": true,
+    "cucumber.strictGherkinValidation": true,
+    "cucumber.suggestSingleStep": true,
+
+    // 文件关联配置
+    "files.associations": {
+        "*.feature": "cucumber"
+    },
+
+    // Python 相关配置（用于 step definitions）
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}"
+    ]
+}

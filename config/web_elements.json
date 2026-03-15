@@ -1,0 +1,108 @@
+{
+    "home": {
+        "title": {"css": "h1"},
+        "welcome_message": {"css": ".welcome-message"},
+        "nav_home": {"css": "[data-section='home']"},
+        "nav_register": {"css": "[data-section='register']"},
+        "nav_order": {"css": "[data-section='order']"},
+        "nav_lazy": {"css": "[data-section='lazy']"},
+        "nav_dropdown": {"css": "[data-section='dropdown']"},
+        "nav_table": {"css": "[data-section='table']"},
+        "nav_components": {"css": "[data-section='components']"},
+        "login_link": {"css": "#user-info a"}
+    },
+    "login": {
+        "modal": {"css": "#login-modal"},
+        "username_input": {"css": "#username"},
+        "password_input": {"css": "#password"},
+        "remember_checkbox": {"css": "#remember"},
+        "login_button": {"css": "#login-button"},
+        "cancel_button": {"css": ".btn-secondary"},
+        "error_message": {"css": "#login-error"},
+        "register_link": {"text": "还没有账号？去注册"}
+    },
+    "register": {
+        "form": {"css": "#register-section form"},
+        "username_input": {"css": "#reg-username"},
+        "email_input": {"css": "#reg-email"},
+        "phone_input": {"css": "#reg-phone"},
+        "password_input": {"css": "#reg-password"},
+        "confirm_input": {"css": "#reg-confirm"},
+        "city_select": {"css": "#reg-city"},
+        "bio_textarea": {"css": "#reg-bio"},
+        "agree_checkbox": {"css": "#reg-agree"},
+        "submit_button": {"css": "#register-section .btn[type='submit']"},
+        "go_login_button": {"css": "#register-section .btn-secondary"}
+    },
+    "order": {
+        "section": {"css": "#order-section"},
+        "product_cards": {"css": ".product-card"},
+        "product_1": {"css": "[data-product-id='1']"},
+        "product_2": {"css": "[data-product-id='2']"},
+        "product_3": {"css": "[data-product-id='3']"},
+        "product_4": {"css": "[data-product-id='4']"},
+        "add_to_cart_1": {"css": "[data-product-id='1'] .btn"},
+        "add_to_cart_2": {"css": "[data-product-id='2'] .btn"},
+        "add_to_cart_3": {"css": "[data-product-id='3'] .btn"},
+        "add_to_cart_4": {"css": "[data-product-id='4'] .btn"},
+        "cart_items": {"css": "#cart-items"},
+        "cart_total": {"css": "#cart-total"},
+        "checkout_button": {"css": ".cart .btn"}
+    },
+    "lazy": {
+        "section": {"css": "#lazy-section"},
+        "load_1s_button": {"text": "1秒加载"},
+        "load_3s_button": {"text": "3秒加载"},
+        "load_5s_button": {"text": "5秒加载"},
+        "content_area": {"css": "#lazy-content"},
+        "loading_spinner": {"css": ".loading-spinner"}
+    },
+    "dropdown": {
+        "section": {"css": "#dropdown-section"},
+        "city_select_button": {"css": "#city-select .select-button"},
+        "city_dropdown": {"css": "#city-select .select-dropdown"},
+        "city_beijing": {"css": "#city-select [data-value='beijing']"},
+        "city_shanghai": {"css": "#city-select [data-value='shanghai']"},
+        "skills_container": {"css": "#skills-select"},
+        "skill_python": {"css": "#skills-select [data-value='python']"},
+        "skill_java": {"css": "#skills-select [data-value='java']"},
+        "selected_skills": {"css": "#selected-skills"}
+    },
+    "table": {
+        "section": {"css": "#table-section"},
+        "table_body": {"css": "#user-table-body"},
+        "select_all_checkbox": {"css": "#select-all"},
+        "current_page": {"css": "#current-page"},
+        "prev_page_button": {"text": "<"},
+        "next_page_button": {"text": ">"},
+        "page_1": {"css": ".page-num:nth-child(2)"},
+        "page_2": {"css": ".page-num:nth-child(3)"},
+        "page_3": {"css": ".page-num:nth-child(4)"}
+    },
+    "components": {
+        "section": {"css": "#components-section"},
+        "tab_1": {"text": "选项卡1"},
+        "tab_2": {"text": "选项卡2"},
+        "tab_3": {"text": "选项卡3"},
+        "tab_content_1": {"css": "#tab1"},
+        "tab_content_2": {"css": "#tab2"},
+        "tab_content_3": {"css": "#tab3"},
+        "accordion_item_1": {"css": ".accordion-item:nth-child(1) .accordion-header"},
+        "accordion_content_1": {"css": ".accordion-item:nth-child(1) .accordion-content"},
+        "progress_bar": {"css": "#progress-bar"},
+        "start_progress_button": {"text": "开始进度"},
+        "success_toast_button": {"text": "成功"},
+        "error_toast_button": {"text": "错误"},
+        "warning_toast_button": {"text": "警告"}
+    },
+    "toast": {
+        "element": {"css": "#toast"}
+    },
+    "user_menu": {
+        "container": {"css": "#user-menu"},
+        "display_username": {"css": "#display-username"},
+        "dropdown": {"css": "#user-dropdown"},
+        "profile_link": {"text": "个人中心"},
+        "logout_link": {"css": ".logout"}
+    }
+}

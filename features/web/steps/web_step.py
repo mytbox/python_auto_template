@@ -8,48 +8,46 @@ from common.playwright_manager import PlaywrightManager
 from loguru import logger
 
 
+def _get_playwright_manager(context):
+    """获取或创建 Playwright 管理器（复用已有实例）"""
+    if not hasattr(context, 'playwright_manager') or not context.playwright_manager:
+        logger.info("创建新的 PlaywrightManager")
+        context.playwright_manager = PlaywrightManager()
+    else:
+        logger.info(f"复用已有的 PlaywrightManager, playwright={context.playwright_manager.playwright}")
+    return context.playwright_manager
+
+
 @given('启动浏览器')
 def launch_browser(context):
     """启动浏览器"""
-    # 检查是否为 Web 测试模式
     context.is_web_test = True
-    logger.info("检测到 Web 测试模式")
-    
-    # 创建 Playwright 管理器
-    context.playwright_manager = PlaywrightManager()
-    
-    # 启动浏览器
-    context.page = context.playwright_manager.start_browser()
+    logger.info("启动浏览器")
+
+    manager = _get_playwright_manager(context)
+    context.page = manager.start_browser()
     logger.info("浏览器启动成功")
 
 
 @given('启动 {browser_type} 浏览器')
 def launch_specific_browser(context, browser_type):
     """启动指定类型的浏览器"""
-    # 检查是否为 Web 测试模式
     context.is_web_test = True
-    logger.info(f"检测到 Web 测试模式，使用 {browser_type} 浏览器")
-    
-    # 创建 Playwright 管理器
-    context.playwright_manager = PlaywrightManager()
-    
-    # 启动指定浏览器
-    context.page = context.playwright_manager.start_browser(browser_type=browser_type)
+    logger.info(f"启动 {browser_type} 浏览器")
+
+    manager = _get_playwright_manager(context)
+    context.page = manager.start_browser(browser_type=browser_type)
     logger.info(f"{browser_type} 浏览器启动成功")
 
 
 @given('启动 {browser_type} 浏览器（有头模式）')
 def launch_headful_browser(context, browser_type):
     """启动有头模式的浏览器"""
-    # 检查是否为 Web 测试模式
     context.is_web_test = True
-    logger.info(f"检测到 Web 测试模式，使用 {browser_type} 浏览器（有头模式）")
-    
-    # 创建 Playwright 管理器
-    context.playwright_manager = PlaywrightManager()
-    
-    # 启动有头模式浏览器
-    context.page = context.playwright_manager.start_browser(browser_type=browser_type, headless=False)
+    logger.info(f"启动 {browser_type} 浏览器（有头模式）")
+
+    manager = _get_playwright_manager(context)
+    context.page = manager.start_browser(browser_type=browser_type, headless=False)
     logger.info(f"{browser_type} 浏览器启动成功（有头模式）")
 
 

@@ -3,7 +3,8 @@
     "allow": [
       "WebSearch",
       "Bash(grep -E '\\\\.\\(feature|py\\)$')",
-      "Bash(python -m behave features/api/features/api_demo.feature)"
+      "Bash(python -m behave features/api/features/api_demo.feature)",
+      "Bash(cd:*)"
     ]
   }
 }
