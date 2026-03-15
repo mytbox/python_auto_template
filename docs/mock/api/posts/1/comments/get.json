@@ -1,0 +1,9 @@
+[
+  {
+    "postId": 1,
+    "id": 1,
+    "name": "Test Commenter",
+    "email": "test@example.com",
+    "body": "Comment for post 1"
+  }
+]

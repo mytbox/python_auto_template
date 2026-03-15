@@ -1,0 +1,11 @@
+{
+  "code": 200,
+  "msg": "Login successful",
+  "ok": true,
+  "data": {
+    "token": "abCdEfGhIjKlMnOpQrStUvWxYz123456",
+    "accountId": "1234567890123456",
+    "number": "test@example.com",
+    "loginType": "email"
+  }
+}

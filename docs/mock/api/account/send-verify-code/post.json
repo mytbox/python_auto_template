@@ -1,0 +1,8 @@
+{
+  "code": 200,
+  "msg": "email verification code sent successfully",
+  "ok": true,
+  "data": {
+    "code": "123456"
+  }
+}
