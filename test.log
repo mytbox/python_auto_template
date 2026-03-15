@@ -1,0 +1,227 @@
+Feature: REST API Demo # features/api/features/api_demo.feature:1
+  REST API demo scenarios using mock API
+  Feature: REST API Demo  # features/api/features/api_demo.feature:1
+
+  Scenario: Get all posts        # features/api/features/api_demo.feature:7
+    Given 初始化测试环境                # features/api/steps/api_demo_step.py:10
+    When 发送 GET 请求到 "/api/posts" # features/api/steps/api_demo_step.py:16
+      Traceback (most recent call last):
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\model.py", line 1991, in run
+          match.run(runner.context)
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features\api\steps\api_demo_step.py", line 19, in send_get_request
+          scenario_context: ScenarioContext = context.scenario_context
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\runner.py", line 430, in __getattr__
+          raise AttributeError(msg)
+      AttributeError: 'Context' object has no attribute 'scenario_context'
+
+    Then 检查 HTTP 状态码为 200        # None
+    Then 响应应该是一个数组               # None
+----
+CAPTURED LOG: scenario
+LOG_INFO:builtins: Test environment initialized
+---- CAPTURED_SCENARIO_OUTPUT_END ----
+
+  Scenario: Get specific post      # features/api/features/api_demo.feature:12
+    Given 初始化测试环境                  # features/api/steps/api_demo_step.py:10
+    When 发送 GET 请求到 "/api/posts/1" # features/api/steps/api_demo_step.py:16
+      Traceback (most recent call last):
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\model.py", line 1991, in run
+          match.run(runner.context)
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features\api\steps\api_demo_step.py", line 19, in send_get_request
+          scenario_context: ScenarioContext = context.scenario_context
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\runner.py", line 430, in __getattr__
+          raise AttributeError(msg)
+      AttributeError: 'Context' object has no attribute 'scenario_context'
+
+    Then 检查 HTTP 状态码为 200          # None
+    Then 检查响应字段 "$.id" 等于 1        # None
+    Then 检查响应字段 "$.title" 不为空      # None
+----
+CAPTURED LOG: scenario
+LOG_INFO:builtins: Test environment initialized
+---- CAPTURED_SCENARIO_OUTPUT_END ----
+
+  Scenario: Create new post             # features/api/features/api_demo.feature:18
+    Given 初始化测试环境                       # features/api/steps/api_demo_step.py:10
+    When 发送 POST 请求到 "/api/posts"，请求体为: # features/api/steps/api_demo_step.py:32
+      """
+      {
+        "title": "测试文章",
+        "body": "这是一篇测试文章的内容",
+        "userId": 1
+      }
+      """
+      Traceback (most recent call last):
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\model.py", line 1991, in run
+          match.run(runner.context)
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features\api\steps\api_demo_step.py", line 35, in send_post_request
+          scenario_context: ScenarioContext = context.scenario_context
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\runner.py", line 430, in __getattr__
+          raise AttributeError(msg)
+      AttributeError: 'Context' object has no attribute 'scenario_context'
+
+    Then 检查 HTTP 状态码为 201               # None
+    Then 检查响应字段 "$.id" 不为空              # None
+    Then 检查响应字段 "$.title" 等于 "测试文章"     # None
+----
+CAPTURED LOG: scenario
+LOG_INFO:builtins: Test environment initialized
+---- CAPTURED_SCENARIO_OUTPUT_END ----
+
+  Scenario: Update post                  # features/api/features/api_demo.feature:31
+    Given 初始化测试环境                        # features/api/steps/api_demo_step.py:10
+    When 发送 PUT 请求到 "/api/posts/1"，请求体为: # features/api/steps/api_demo_step.py:53
+      """
+      {
+        "id": 1,
+        "title": "更新后的标题",
+        "body": "更新后的内容",
+        "userId": 1
+      }
+      """
+      Traceback (most recent call last):
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\model.py", line 1991, in run
+          match.run(runner.context)
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features\api\steps\api_demo_step.py", line 56, in send_put_request
+          scenario_context: ScenarioContext = context.scenario_context
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\runner.py", line 430, in __getattr__
+          raise AttributeError(msg)
+      AttributeError: 'Context' object has no attribute 'scenario_context'
+
+    Then 检查 HTTP 状态码为 200                # None
+    Then 检查响应字段 "$.id" 等于 1              # None
+    Then 检查响应字段 "$.title" 等于 "更新后的标题"    # None
+----
+CAPTURED LOG: scenario
+LOG_INFO:builtins: Test environment initialized
+---- CAPTURED_SCENARIO_OUTPUT_END ----
+
+  Scenario: Delete post               # features/api/features/api_demo.feature:45
+    Given 初始化测试环境                     # features/api/steps/api_demo_step.py:10
+    When 发送 DELETE 请求到 "/api/posts/1" # features/api/steps/api_demo_step.py:74
+      Traceback (most recent call last):
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\model.py", line 1991, in run
+          match.run(runner.context)
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features\api\steps\api_demo_step.py", line 77, in send_delete_request
+          scenario_context: ScenarioContext = context.scenario_context
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\runner.py", line 430, in __getattr__
+          raise AttributeError(msg)
+      AttributeError: 'Context' object has no attribute 'scenario_context'
+
+    Then 检查 HTTP 状态码为 200             # None
+----
+CAPTURED LOG: scenario
+LOG_INFO:builtins: Test environment initialized
+---- CAPTURED_SCENARIO_OUTPUT_END ----
+
+  Scenario: Get user posts               # features/api/features/api_demo.feature:49
+    Given 初始化测试环境                        # features/api/steps/api_demo_step.py:10
+    When 发送 GET 请求到 "/api/users/1/posts" # features/api/steps/api_demo_step.py:16
+      Traceback (most recent call last):
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\model.py", line 1991, in run
+          match.run(runner.context)
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features\api\steps\api_demo_step.py", line 19, in send_get_request
+          scenario_context: ScenarioContext = context.scenario_context
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\runner.py", line 430, in __getattr__
+          raise AttributeError(msg)
+      AttributeError: 'Context' object has no attribute 'scenario_context'
+
+    Then 检查 HTTP 状态码为 200                # None
+    Then 响应应该是一个数组                       # None
+----
+CAPTURED LOG: scenario
+LOG_INFO:builtins: Test environment initialized
+---- CAPTURED_SCENARIO_OUTPUT_END ----
+
+  Scenario: Get post comments               # features/api/features/api_demo.feature:54
+    Given 初始化测试环境                           # features/api/steps/api_demo_step.py:10
+    When 发送 GET 请求到 "/api/posts/1/comments" # features/api/steps/api_demo_step.py:16
+      Traceback (most recent call last):
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\model.py", line 1991, in run
+          match.run(runner.context)
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features\api\steps\api_demo_step.py", line 19, in send_get_request
+          scenario_context: ScenarioContext = context.scenario_context
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\runner.py", line 430, in __getattr__
+          raise AttributeError(msg)
+      AttributeError: 'Context' object has no attribute 'scenario_context'
+
+    Then 检查 HTTP 状态码为 200                   # None
+    Then 响应应该是一个数组                          # None
+----
+CAPTURED LOG: scenario
+LOG_INFO:builtins: Test environment initialized
+---- CAPTURED_SCENARIO_OUTPUT_END ----
+
+  Scenario: Get all users        # features/api/features/api_demo.feature:59
+    Given 初始化测试环境                # features/api/steps/api_demo_step.py:10
+    When 发送 GET 请求到 "/api/users" # features/api/steps/api_demo_step.py:16
+      Traceback (most recent call last):
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\model.py", line 1991, in run
+          match.run(runner.context)
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features\api\steps\api_demo_step.py", line 19, in send_get_request
+          scenario_context: ScenarioContext = context.scenario_context
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\runner.py", line 430, in __getattr__
+          raise AttributeError(msg)
+      AttributeError: 'Context' object has no attribute 'scenario_context'
+
+    Then 检查 HTTP 状态码为 200        # None
+    Then 响应应该是一个数组               # None
+----
+CAPTURED LOG: scenario
+LOG_INFO:builtins: Test environment initialized
+---- CAPTURED_SCENARIO_OUTPUT_END ----
+
+  Scenario: Create user                 # features/api/features/api_demo.feature:64
+    Given 初始化测试环境                       # features/api/steps/api_demo_step.py:10
+    When 发送 POST 请求到 "/api/users"，请求体为: # features/api/steps/api_demo_step.py:32
+      """
+      {
+        "name": "测试用户",
+        "email": "test@example.com",
+        "phone": "13800138000"
+      }
+      """
+      Traceback (most recent call last):
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\model.py", line 1991, in run
+          match.run(runner.context)
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features\api\steps\api_demo_step.py", line 35, in send_post_request
+          scenario_context: ScenarioContext = context.scenario_context
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "D:\apps\Python\Python312\Lib\site-packages\behave\runner.py", line 430, in __getattr__
+          raise AttributeError(msg)
+      AttributeError: 'Context' object has no attribute 'scenario_context'
+
+    Then 检查 HTTP 状态码为 201               # None
+    Then 检查响应字段 "$.id" 不为空              # None
+    Then 检查响应字段 "$.name" 不为空            # None
+----
+CAPTURED LOG: scenario
+LOG_INFO:builtins: Test environment initialized
+---- CAPTURED_SCENARIO_OUTPUT_END ----
+
