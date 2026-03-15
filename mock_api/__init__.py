@@ -1,3 +1,0 @@
-"""
-Mock API Server Package
-"""

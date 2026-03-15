@@ -98,7 +98,7 @@ def get_ai_config(profile=None):
 def init_behave_config(context):
     """初始化Behave环境的配置管理器"""
     global _behave_config_manager
-    # 从Behave context获取profile参数，默认使用local
+    # 从Behave context获取profile参数，默认使用dev
     profile = getattr(context.config, 'userdata', {}).get('profile', 'dev')
     logger.info(f"Loading config with profile: {profile}")
     _behave_config_manager = ConfigManager(profile=profile)

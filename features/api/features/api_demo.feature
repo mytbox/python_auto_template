@@ -1,5 +1,7 @@
 Feature: REST API Demo
-  REST API demo scenarios using static JSON files from GitHub Pages
+  REST API demo scenarios using static JSON files (local)
+  This is a sample test case for the automation testing template.
+  JSON files are located at: docs/mock/api/
 
   Background:
     Given 初始化测试环境
